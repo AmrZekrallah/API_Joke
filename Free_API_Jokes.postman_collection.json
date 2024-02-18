@@ -1,0 +1,209 @@
+{
+	"info": {
+		"_postman_id": "d45aa99f-458d-4908-bb8d-dff3614099e8",
+		"name": "Free_API_Jokes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28814229",
+		"_collection_link": "https://warped-sunset-527761.postman.co/workspace/New-Team-Workspace~403a0b96-f60b-45ae-8270-22e0c2da56e6/collection/28814229-d45aa99f-458d-4908-bb8d-dff3614099e8?action=share&source=collection_link&creator=28814229"
+	},
+	"item": [
+		{
+			"name": "Jokes_ByType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"console.log(response[0].id)\r",
+							"\r",
+							"pm.test(\"Type programming\", function () {\r",
+							"    pm.expect(response[0].type).to.equal(\"programming\");\r",
+							"});\r",
+							"\r",
+							"pm.test('Type Should be programming', function () {\r",
+							"    var responseJSON = pm.response.json();\r",
+							"    responseJSON.forEach(joke => {\r",
+							"        pm.expect(joke.type).to.equal('programming');\r",
+							"    });\r",
+							"})\r",
+							"\r",
+							"pm.test('Status code is 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseUrl}}jokes/programming/ten",
+					"host": [
+						"{{BaseUrl}}jokes"
+					],
+					"path": [
+						"programming",
+						"ten"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Jokes_ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);  \r",
+							"});\r",
+							"                 //assert type of list should be general//\r",
+							"const response = pm.response.json();\r",
+							"console.log(response.status);\r",
+							"pm.test(\"Type Should be general\", function () {\r",
+							"    var responseObject = pm.response.json();\r",
+							"    pm.expect(responseObject).to.be.an('object');\r",
+							"    pm.expect(responseObject.type).to.equal('general');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"id Should be 110\", function () {\r",
+							"    var jsonResponse = pm.response.json();\r",
+							"    pm.expect(jsonResponse.id).to.equal(110);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Successful GET request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code name has string\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/jokes/110",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"jokes",
+						"110"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RandomJokes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							" // verify that there is no duplication for punchline display//\r",
+							"pm.test(\"Verify no duplicated punchlines\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('array');\r",
+							"\r",
+							"    var punchlines = jsonData.map(item => item.punchline);\r",
+							"    var uniquePunchlines = [...new Set(punchlines)];\r",
+							"\r",
+							"    pm.expect(uniquePunchlines.length).to.equal(punchlines.length, \"Duplicated punchlines found: \" + findDuplicates(punchlines));\r",
+							"});\r",
+							"\r",
+							"function findDuplicates(arr) {\r",
+							"    var duplicates = arr.filter((item, index) => arr.indexOf(item, index + 1) > -1);\r",
+							"    return duplicates;}\r",
+							"\r",
+							"// id unique //\r",
+							"pm.test(\"IDs are unique\", function () {\r",
+							"    const responseBody = pm.response.json();\r",
+							"    const id = responseBody.map(item => item.id);\r",
+							"\r",
+							"    const uniqueId = [...new Set(id)];\r",
+							"    pm.expect(id.length).to.equal(uniqueId.length);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BaseUrl}}random_ten",
+					"host": [
+						"{{BaseUrl}}random_ten"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseurl",
+			"value": "https://api.publicapis.org/"
+		},
+		{
+			"key": "BaseUrl",
+			"value": "https://official-joke-api.appspot.com/"
+		}
+	]
+}
